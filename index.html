@@ -177,6 +177,14 @@ footer .small{color:#8ba3c4;font-size:.88rem;margin-top:22px}
   .sec{padding:40px 0}
 }
 </style>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WY7DGFXVQ6"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-WY7DGFXVQ6');
+</script>
 </head>
 <body>
 
@@ -468,6 +476,15 @@ footer .small{color:#8ba3c4;font-size:.88rem;margin-top:22px}
     btn.disabled = true; btn.textContent = 'Sending…';
   });
 })();
+</script>
+<script>
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('a');
+  if (!a) return;
+  var href = a.getAttribute('href') || '';
+  if (href.indexOf('tel:') === 0) gtag('event', 'call_click', { method: 'phone' });
+  if (href.indexOf('sms:') === 0) gtag('event', 'text_click', { method: 'sms' });
+});
 </script>
 </body>
 </html>
