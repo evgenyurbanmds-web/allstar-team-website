@@ -314,14 +314,14 @@ gtag('config', 'G-WY7DGFXVQ6');
   <div class="wrap">
     <h2>What Customers Say</h2>
     <div class="rev-head">
-      <div class="rev-score">5.0</div>
+      <div class="rev-score" id="gr-score">5.0</div>
       <div>
         <div class="stars" style="font-size:1.3rem">★★★★★</div>
-        <div>40 reviews on Google — all 5 stars</div>
+        <div><span id="gr-count">40</span> reviews on Google — all 5 stars</div>
         <a href="https://www.google.com/maps/search/?api=1&amp;query=Allstar+Upholstery+Cleaning,+11552+Crowned+Sparrow+Ln,+Tampa,+FL+33626" target="_blank" rel="noopener">Read all reviews on Google →</a>
       </div>
     </div>
-    <div class="grid grid-3">
+    <div class="grid grid-3" id="gr-cards">
       <div class="card rev-card">
         <div class="who"><div class="avatar">JC</div><div><div class="name">Jane Croskey</div><div class="when">Google review</div></div></div>
         <div class="stars">★★★★★</div>
@@ -485,6 +485,24 @@ document.addEventListener('click', function (e) {
   if (href.indexOf('tel:') === 0) gtag('event', 'call_click', { method: 'phone', transport_type: 'beacon' });
   if (href.indexOf('sms:') === 0) gtag('event', 'text_click', { method: 'sms', transport_type: 'beacon' });
 });
+</script>
+
+<script>
+(function(){
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function initials(n){return (n||'?').split(/\s+/).map(function(w){return w.charAt(0);}).slice(0,2).join('').toUpperCase();}
+  fetch('reviews.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+    var sc=document.getElementById('gr-score'); if(sc&&d.rating!=null) sc.textContent=Number(d.rating).toFixed(1);
+    var ct=document.getElementById('gr-count'); if(ct&&d.count!=null) ct.textContent=d.count;
+    var box=document.getElementById('gr-cards'); if(!box) return;
+    var html='';
+    (d.reviews||[]).slice(0,6).forEach(function(rv){
+      var stars='\u2605\u2605\u2605\u2605\u2605'.slice(0, rv.rating||5);
+      html+='<div class="card rev-card"><div class="who"><div class="avatar">'+esc(initials(rv.author))+'</div><div><div class="name">'+esc(rv.author)+'</div><div class="when">'+esc(rv.when||'Google review')+'</div></div></div><div class="stars">'+stars+'</div><p>&ldquo;'+esc(rv.text)+'&rdquo;</p><div class="src">Posted on Google</div></div>';
+    });
+    if(html) box.innerHTML=html;
+  }).catch(function(){});
+})();
 </script>
 </body>
 </html>
