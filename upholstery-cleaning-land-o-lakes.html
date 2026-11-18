@@ -315,8 +315,8 @@ document.addEventListener('click', function (e) {
   var a = e.target.closest('a');
   if (!a) return;
   var href = a.getAttribute('href') || '';
-  if (href.indexOf('tel:') === 0) gtag('event', 'call_click', { method: 'phone' });
-  if (href.indexOf('sms:') === 0) gtag('event', 'text_click', { method: 'sms' });
+  if (href.indexOf('tel:') === 0) gtag('event', 'call_click', { method: 'phone', transport_type: 'beacon' });
+  if (href.indexOf('sms:') === 0) gtag('event', 'text_click', { method: 'sms', transport_type: 'beacon' });
 });
 </script>
 </body>
