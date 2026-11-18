@@ -1,0 +1,27 @@
+name: Update Google reviews
+on:
+  schedule:
+    - cron: "23 11 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch reviews from Google Places API
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+        run: python3 scripts/fetch_reviews.py
+      - name: Commit reviews.json if changed
+        run: |
+          if ! git diff --quiet -- reviews.json; then
+            git config user.name "github-actions"
+            git config user.email "actions@github.com"
+            git add reviews.json
+            git commit -m "Update Google reviews"
+            git push
+          else
+            echo "No changes"
+          fi
